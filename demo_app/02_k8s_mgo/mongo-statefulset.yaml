@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec:
+  serviceName: mongo
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:4.4
+        command:
+        - mongod
+        - --replSet
+        - rs0
+        - --bind_ip_all
+        ports:
+        - containerPort: 27017
+          name: mongod
+        volumeMounts:
+        - name: database
+          mountPath: /data/db
+        livenessProbe:
+          exec:
+            command:
+            - /usr/bin/mongo
+            - --eval
+            - db.serverStatus()
+          initialDelaySeconds: 10
+          timeoutSeconds: 10
+      # This container initializes the mongodb, then sleeps.
+      - name: init-mongo
+        image: doody/mongodb-ping:4.4
+        command:
+        - bash
+        - /config/init.sh
+        volumeMounts:
+        - name: config
+          mountPath: /config
+      volumes:
+      - name: config
+        configMap:
+          name: "mongo-init"
+  volumeClaimTemplates:
+  - metadata:
+      name: database
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 20Gi
