@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flask-app-config
+data:
+  app.cfg: |
+    DEBUG=True
+    SECRET_KEY=b'zkwDBJ&^4kSm_eUJ'
+    MONGODB_HOST='mongodb://mongo:27017/blog?replicaSet=rs0'

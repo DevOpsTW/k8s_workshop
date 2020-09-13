@@ -1,0 +1,6 @@
+<!doctype html>
+<ul>
+    {% for post in posts %}
+    <li><a href="post/view/{{ post.id }}">{{ post.title }}</a></li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+spec:
+  selector:
+    matchLabels:
+      app: flask-app
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - name: flask-app
+        image: doody/flask_app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+          - name: flask-config
+            mountPath: /app/app.cfg
+            subPath: app.cfg
+      volumes:
+        - name: flask-config
+          configMap:
+            name: "flask-app-config"
