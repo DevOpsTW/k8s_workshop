@@ -1,7 +1,10 @@
 from flask import Flask, request, redirect, render_template, url_for
 from flask_mongoengine import MongoEngine
 
+from datetime import datetime
+
 from models import Post
+
 
 app = Flask(__name__)
 app.config.from_pyfile('app.cfg')
@@ -9,7 +12,7 @@ db = MongoEngine(app)
 
 @app.route('/')
 def index():
-    posts = Post.objects()
+    posts = Post.objects().order_by('-update_at')
     return render_template('list_posts.html', posts=posts)
 
 # Create
@@ -18,7 +21,8 @@ def add_post():
     if request.method == 'POST':
         post = Post(
             title=str(request.form['title']), 
-            content=str(request.form['content'])
+            content=str(request.form['content']),
+            update_at=datetime.now()
             ).save()
         return redirect(url_for('index'))
     return render_template('add_post.html')
@@ -36,6 +40,7 @@ def edit_post(post_id):
     if request.method == 'POST':
         post.title = str(request.form['title'])
         post.content = str(request.form['content'])
+        post.update_at = datetime.now()
         post.save()
         return redirect(url_for('view_post', post_id=post_id))
     return render_template('edit_post.html', post=post)

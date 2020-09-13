@@ -1,6 +1,62 @@
-<!doctype html>
-<form method="POST" action="/post/add">
-    <input type="text" name="title">
-    <textarea name="content"></textarea>
-    <input type="submit" value="Submit">
-</form>
+{% extends "base.html" %}
+{% block extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: 'textarea#editor',
+        menubar: false
+    });
+</script>
+{% endblock %}
+{% block main %}
+<div class="col-md-8 blog-main">
+    <div class="blog-post">
+        <div class="col-md-12 mb-3">
+            <h2 class="blog-post-title">Adding New Post</h2>
+        </div>
+        <div class="form-group">
+            <form method="POST" action="{{ url_for('add_post') }}">
+                <div class="col-md-12 mb-3">
+                    <label for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="title">
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label for="editor">Content</label>
+                    <textarea class="form-control" id="editor" name="content"></textarea>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <button class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+        <p class="blog-post-meta">January 1, 2014</p>
+
+    </div><!-- /.blog-post -->
+</div><!-- /.blog-main -->
+{% endblock %}
+
+{% block side_bar %}
+<aside class="col-md-4 blog-sidebar">
+    <div class="p-4">
+      <h4 class="font-italic">Menu</h4>       
+      <ol class="list-unstyled mb-0">
+        <li>
+          <a href="{{ url_for('index') }}">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-house" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+              <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
+            </svg> Home
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('add_post') }}">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+              <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg> New Post
+          </a>
+        </li>
+      </ol>
+    </div>
+  </aside><!-- /.blog-sidebar -->
+{% endblock %}
