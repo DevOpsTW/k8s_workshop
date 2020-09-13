@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plain-app
+spec:
+  selector:
+    matchLabels:
+      app: plain-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: plain-app
+    spec:
+      containers:
+      - name: plain-app
+        image: doody/plain_app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
