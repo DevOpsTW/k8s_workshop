@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, url_for
 from flask_mongoengine import MongoEngine
 
 from models import Post
@@ -20,7 +20,7 @@ def add_post():
             title=str(request.form['title']), 
             content=str(request.form['content'])
             ).save()
-        return redirect('/')
+        return redirect(url_for('index'))
     return render_template('add_post.html')
 
 # Read
@@ -37,7 +37,7 @@ def edit_post(post_id):
         post.title = str(request.form['title'])
         post.content = str(request.form['content'])
         post.save()
-        return redirect(f'/post/view/{post_id}')
+        return redirect(url_for('view_post', post_id=post_id))
     return render_template('edit_post.html', post=post)
 
 # Delete
@@ -45,7 +45,7 @@ def edit_post(post_id):
 def del_post(post_id):
     post = Post.objects(id=post_id).first()
     post.delete()
-    return redirect('/')
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

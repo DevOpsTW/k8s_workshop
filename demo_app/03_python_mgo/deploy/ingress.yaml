@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: flask-app-ingress
+  name: demo-app-ingress
 spec:
   rules:
   - http:
