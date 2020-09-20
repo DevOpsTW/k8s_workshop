@@ -7,7 +7,7 @@
   <meta name="description" content="">
   <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
   <meta name="generator" content="Jekyll v4.1.1">
-  <title>Blog Template · Bootstrap</title>
+  <title>{{ blog_config.title }}</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/blog/">
 
@@ -57,14 +57,14 @@
     <header class="blog-header py-3">
       <div class="row flex-nowrap justify-content-between align-items-center">
         <div class="col-12 text-center">
-          <a class="blog-header-logo text-dark" href="{{ url_for('index') }}">My Blog Title</a>
+          <a class="blog-header-logo text-dark" href="{{ url_for('index') }}">{{ blog_config.title }}</a>
         </div>
       </div>
     </header>
     <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark">
       <div class="col-md-6 px-0">
-        <h1 class="display-4 font-italic">Kubernetes 實戰工作坊</h1>
-        <p class="lead my-3">帶你從無到有打造 Kubernetes 的環境</p>
+        <h1 class="display-4 font-italic">{{ blog_config.banner_title }}</h1>
+        <p class="lead my-3">{{ blog_config.banner_subtitle }}</p>
       </div>
     </div>
   </div>

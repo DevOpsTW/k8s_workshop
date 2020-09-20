@@ -10,10 +10,21 @@ app = Flask(__name__)
 app.config.from_pyfile('app.cfg')
 db = MongoEngine(app)
 
+class BlogConfig():
+    def __init__(self, title, banner_title, banner_subtitle):
+        self.title = title
+        self.banner_title = banner_title
+        self.banner_subtitle = banner_subtitle
+
+blog_config = BlogConfig(
+    app.config['BLOG_TITLE'], 
+    app.config['BLOG_BANNER_TITLE'], 
+    app.config['BLOG_BANNER_SUBTITLE'])
+
 @app.route('/')
 def index():
     posts = Post.objects().order_by('-update_at')
-    return render_template('list_posts.html', posts=posts)
+    return render_template('list_posts.html', blog_config=blog_config, posts=posts)
 
 # Create
 @app.route('/post/add', methods=['GET', 'POST'])
@@ -25,13 +36,13 @@ def add_post():
             update_at=datetime.now()
             ).save()
         return redirect(url_for('index'))
-    return render_template('add_post.html')
+    return render_template('add_post.html', blog_config=blog_config)
 
 # Read
 @app.route('/post/view/<post_id>')
 def view_post(post_id):
     post = Post.objects(id=post_id).first()
-    return render_template('view_post.html', post=post)
+    return render_template('view_post.html',blog_config=blog_config, post=post)
 
 # Update
 @app.route('/post/edit/<post_id>', methods=['GET', 'POST'])
@@ -43,7 +54,7 @@ def edit_post(post_id):
         post.update_at = datetime.now()
         post.save()
         return redirect(url_for('view_post', post_id=post_id))
-    return render_template('edit_post.html', post=post)
+    return render_template('edit_post.html', blog_config=blog_config, post=post)
 
 # Delete
 @app.route('/post/delete/<post_id>')
