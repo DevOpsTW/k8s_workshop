@@ -16,6 +16,11 @@ spec:
       - name: flask-app
         image: doody/flask_app:latest
         imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 200m
+          requests:
+            cpu: 100m
         ports:
         - containerPort: 5000
         volumeMounts:
