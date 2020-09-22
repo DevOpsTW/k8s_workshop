@@ -1,0 +1,10 @@
+replicaCount: 1
+
+image:
+  pullPolicy: Always
+  repository: doody/plain_app
+  tag: "latest"
+
+service:
+  port: 80
+

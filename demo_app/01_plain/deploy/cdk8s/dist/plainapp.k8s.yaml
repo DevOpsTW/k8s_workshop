@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: plain-app-ingress-a258316d
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              serviceName: plain-app-service
+              servicePort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: plain-app-service-2bf1f3a7
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: plain-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: plain-app-deployment-0af99c5f
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: plain-app
+  template:
+    metadata:
+      labels:
+        app: plain-app
+    spec:
+      containers:
+        - image: doody/plain_app:latest
+          imagePullPolicy: Always
+          name: plain-app
+          ports:
+            - containerPort: 80

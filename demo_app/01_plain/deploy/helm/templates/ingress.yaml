@@ -1,0 +1,16 @@
+{{- $fullName := include "plain.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+              serviceName: {{ $fullName }}-service
+              servicePort: {{ $svcPort }}
+
+
