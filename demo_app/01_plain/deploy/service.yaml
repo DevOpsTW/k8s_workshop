@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: plain-app-service
 spec:
+  type: LoadBalancer
   selector:
     app: plain-app
   ports:
