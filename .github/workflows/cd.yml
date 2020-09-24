@@ -28,5 +28,12 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         IMAGE_TAG: ${{ github.sha }}
       with:
-        args: get pods
+        args: apply -k demo_app/01_plain/deploy/kustomize
+    - name: Get cluster
+      uses: kodermax/kubectl-aws-eks@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        IMAGE_TAG: ${{ github.sha }}
+      with:
+        args: get -k demo_app/01_plain/deploy/kustomize
         
