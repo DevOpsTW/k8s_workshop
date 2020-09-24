@@ -8,6 +8,7 @@
   * [AWS](https://aws.amazon.com/tw/free/)
   * [Azure](https://azure.microsoft.com/zh-tw/free/search/)
   * [GCP](https://cloud.google.com/gcp)
+
 * 安裝 cli
   * eksctl for EKS [文件](https://eksctl.io/introduction/#installation)
   * azure cli for AKS [文件](https://docs.microsoft.com/zh-tw/cli/azure/?view=azure-cli-latest)
@@ -19,6 +20,24 @@
 	  $ az aks install-cli
 	  $ gcloud components install kubectl
 	  ```
+
+* 安裝 k8s yaml 管理工具
+  * Helm [文件](https://helm.sh/docs/intro/install/)
+  * Kustomize [文件](https://kubernetes-sigs.github.io/kustomize/installation/)
+  * cdk8s [文件](https://github.com/awslabs/cdk8s/blob/master/README.md#getting-started)
+
+
+最後確認各工具安裝正常
+
+```shell
+$ eksctl version
+$ az version
+$ gcloud version
+$ kubectl version
+$ helm version
+$ kustomize version
+$ cdk8s --version
+```
 
 ## 建立 Kubernetes
 
