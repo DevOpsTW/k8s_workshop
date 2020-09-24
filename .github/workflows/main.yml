@@ -16,4 +16,5 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: sammylin/k8s-01_plain
+        path: demo_app/01_plain
         tags: ${{ github.sha }}, latest
