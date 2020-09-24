@@ -11,16 +11,9 @@ class MyChart(Chart):
 
         label = {"app": "plain-app"}
 
-        k8s.Ingress(self, 'ingress',
-                    spec=k8s.IngressSpec(
-                      rules=[k8s.IngressRule(
-                      http=k8s.HttpIngressRuleValue(
-                        paths=[k8s.HttpIngressPath(
-                          backend=k8s.IngressBackend(
-                            service_name='plain-app-service',
-                            service_port=k8s.IntOrString.from_number(80)))]))]))
         k8s.Service(self, 'service',
                     spec=k8s.ServiceSpec(
+                      type='LoadBalancer',
                       ports=[k8s.ServicePort(protocol='TCP',port=80, target_port=k8s.IntOrString.from_number(80))],
                       selector=label))
 

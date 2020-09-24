@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: flask-app-service
 spec:
+  type: LoadBalancer
   selector:
     app: flask-app
   ports:

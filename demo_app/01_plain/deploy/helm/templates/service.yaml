@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: {{ include "plain.fullname" . }}-service
 spec:
+  type: LoadBalancer
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
