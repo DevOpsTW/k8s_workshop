@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 on:
   push:
     branches: [ master ]
@@ -15,6 +15,32 @@ jobs:
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: sammylin/k8s-01_plain
-        path: demo_app/01_plain
+        repository: sammylin/k8s-05_cicd
+        path: demo_app/05_cicd
         tags: ${{ github.sha }}, latest
+  deploy_to_production:
+    runs-on: ubuntu-latest
+    name: Deploy to k8s cluster
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v2
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2
+    - name: deploy to cluster
+      uses: kodermax/kubectl-aws-eks@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        IMAGE_TAG: ${{ github.sha }}
+      with:
+        args: apply -k ./demo_app/05_cicd/deploy/kustomize
+    - name: Get cluster info
+      uses: kodermax/kubectl-aws-eks@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        IMAGE_TAG: ${{ github.sha }}
+      with:
+        args: get -k ./demo_app/05_cicd/deploy/kustomize

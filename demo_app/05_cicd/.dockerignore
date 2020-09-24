@@ -1,0 +1,11 @@
+
+.git
+k8s
+**/*.log
+**/*-log-*
+**/*.tar.gz
+**/*.war
+Dockerfile
+.dockerignore
+*.md
+!info.md
