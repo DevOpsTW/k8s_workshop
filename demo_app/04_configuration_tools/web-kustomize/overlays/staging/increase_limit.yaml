@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+spec:
+  template:
+    spec:
+      containers:
+       - name: flask-app
+         resources:
+          limits:
+            cpu: 500m

@@ -1,0 +1,8 @@
+# Blog setting
+blog:
+  title: "K8s Summit Blog"
+  banner: 
+    title: "Kubernetes 實戰工作坊"
+    subtitle: "帶你從無到有打造 Kubernetes 的環境"
+
+replicas: 3

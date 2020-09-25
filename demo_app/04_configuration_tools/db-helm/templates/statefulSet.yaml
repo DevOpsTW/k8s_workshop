@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "mongodb.fullname" . }}
+spec:
+  serviceName: {{ .Values.serviceName }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "mongodb.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "mongodb.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          command:
+          - mongod
+          - --replSet
+          - rs0
+          - --bind_ip_all
+          ports:
+            - name: mongod
+              containerPort: 27017
+          volumeMounts:
+            - name: database
+              mountPath: /data/db
+          livenessProbe:
+            exec:
+              command:
+               - /usr/bin/mongo
+               - --eval
+               - db.serviceStatus()
+            initialDelaySeconds: 10
+            timeoutSeconds: 10
+        - name: init-mongo
+          image: doody/mongodb-ping:4.4
+          command:
+          - bash
+          - /config/init.sh
+          volumeMounts:
+          - name: config
+            mountPath: /config
+      volumes:
+      - name: config
+        configMap:
+          name: {{ .Release.Name }}-mongo-init
+  volumeClaimTemplates:
+  - metadata:
+      name: database
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.storage.size | default "20Gi" }}

@@ -1,0 +1,22 @@
+replicaCount: 3
+
+image:
+  repository: doody/mongodb
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+serviceName: mongo
+service:
+  port: 27017
+
+resources: {}
+  limits:
+    cpu: 1000m
+    memory: 1280Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+storage:
+  size: 20Gi
+

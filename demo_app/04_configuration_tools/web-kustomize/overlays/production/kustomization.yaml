@@ -1,0 +1,14 @@
+bases:
+- ../../base
+
+namePrefix: production-
+
+commonLabels:
+  env: production
+  app: web
+
+configMapGenerator:
+- name: flask-app-config
+  behavior: replace
+  files:
+  - app.cfg

@@ -1,0 +1,16 @@
+bases:
+- ../../base
+
+namePrefix: staging-
+commonLabels:
+  env: staging
+  app: web
+
+configMapGenerator:
+- name: flask-app-config
+  behavior: merge
+  files:
+  - app.cfg
+
+patchesStrategicMerge:
+- increase_limit.yaml

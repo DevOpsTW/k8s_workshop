@@ -1,0 +1,16 @@
+bases:
+- ../../base
+
+namePrefix: development-
+commonLabels:
+  env: development
+  app: web
+
+configMapGenerator:
+- name: flask-app-config
+  behavior: merge
+  files:
+  - app.cfg
+
+patchesStrategicMerge:
+- one_replicas.yaml

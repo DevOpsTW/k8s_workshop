@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "flask-app.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "flask-app.fullname" . }}
+  replicas: {{ .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "flask-app.fullname" . }}
+    spec:
+      containers:
+      - name: flask-app
+        image: doody/flask_app:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 200m
+          requests:
+            cpu: 100m
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+          - name: flask-config
+            mountPath: /app/app.cfg
+            subPath: app.cfg
+      volumes:
+        - name: flask-config
+          configMap:
+            name: {{ include "flask-app.fullname" . }}-config
