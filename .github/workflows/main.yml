@@ -28,7 +28,7 @@ jobs:
       uses: datamonsters/replace-action@v2
       with:
         files: ./demo_app/05_cicd/k8s/deployment.yaml
-        replacements: '$IMAGE_TAG=$${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}'
+        replacements: '$IMAGE_TAG=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}'
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
