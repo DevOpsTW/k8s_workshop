@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: sammy/k8s-05_cicd:latest
+        image: $IMAGE_TAG
         imagePullPolicy: Always
         ports:
         - containerPort: 80
