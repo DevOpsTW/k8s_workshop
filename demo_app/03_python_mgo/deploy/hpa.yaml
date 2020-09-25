@@ -3,8 +3,8 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: flask-app
 spec:
-  maxReplicas: 10
-  minReplicas: 3
+  maxReplicas: 2
+  minReplicas: 1
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
