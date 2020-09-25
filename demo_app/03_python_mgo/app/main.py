@@ -13,15 +13,17 @@ app.config.from_pyfile('build-date.txt')
 db = MongoEngine(app)
 
 class BlogConfig():
-    def __init__(self, title, banner_title, banner_subtitle):
+    def __init__(self, title, banner_title, banner_subtitle, banner_color):
         self.title = title
         self.banner_title = banner_title
         self.banner_subtitle = banner_subtitle
+        self.banner_color = banner_color
 
 blog_config = BlogConfig(
     app.config['BLOG_TITLE'], 
     app.config['BLOG_BANNER_TITLE'], 
-    app.config['BLOG_BANNER_SUBTITLE'])
+    app.config['BLOG_BANNER_SUBTITLE'],
+    app.config['BLOG_BANNER_COLOR'])
 
 hostname = os.getenv('HOSTNAME', default='')
 version = app.config['VERSION']
