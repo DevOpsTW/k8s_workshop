@@ -1,8 +1,2 @@
-resources:
-- deployment.yaml
-- service.yaml
-
-configMapGenerator:
-- name: flask-app-config
-  files:
-  - app.cfg
+bases:
+- ../../../03_python_mgo/deploy/
