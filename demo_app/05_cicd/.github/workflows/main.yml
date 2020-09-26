@@ -18,9 +18,9 @@ jobs:
         repository: ${{ secrets.DOCKER_REPOSITORY }}
         path: .
         tags: ${{ github.sha }}, latest
-  deploy_to_production:
+  deploy_to_eks:
     runs-on: ubuntu-latest
-    name: Deploy to k8s cluster
+    name: Deploy to k8s cluster in AWS
     steps:
     - name: Check out the repo
       uses: actions/checkout@v2
@@ -35,15 +35,43 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
-    - name: deploy to cluster
+    - name: Deploy to EKS cluster
       uses: kodermax/kubectl-aws-eks@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
       with:
         args: apply -k ./k8s
-    - name: Get cluster info
+    - name: Get K8s cluster info
       uses: kodermax/kubectl-aws-eks@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      with:
+        args: get -k ./k8s
+  deploy_to_gcp:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v2
+    - name: Replace image tag in deployment
+      uses: datamonsters/replace-action@v2
+      with:
+        files: ./k8s/deployment.yaml
+        replacements: '$IMAGE_TAG=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}'
+    - name: Deploy to GCP cluster
+      uses: ameydev/gke-kubectl-action@master
+      env:
+        PROJECT_ID: ${{ secrets.PROJECT_ID }}
+        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
+        ZONE_NAME: ${{ secrets.ZONE_NAME }}
+      with:
+        args: apply -k ./k8s
+    - name: Get K8s cluster info
+      uses: ameydev/gke-kubectl-action@master
+      env:
+        PROJECT_ID: ${{ secrets.PROJECT_ID }}
+        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
+        ZONE_NAME: ${{ secrets.ZONE_NAME }}
       with:
         args: get -k ./k8s

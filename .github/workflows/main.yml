@@ -18,7 +18,7 @@ jobs:
         repository: ${{ secrets.DOCKER_REPOSITORY }}
         path: demo_app/05_cicd
         tags: ${{ github.sha }}, latest
-  # deploy_to_aws:
+  # deploy_to_eks:
   #   runs-on: ubuntu-latest
   #   name: Deploy to k8s cluster in AWS
   #   steps:
@@ -35,7 +35,7 @@ jobs:
   #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
   #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   #       aws-region: us-west-2
-  #   - name: Deploy to AWS cluster
+  #   - name: Deploy to EKS cluster
   #     uses: kodermax/kubectl-aws-eks@master
   #     env:
   #       KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
@@ -47,7 +47,7 @@ jobs:
   #       KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
   #     with:
   #       args: get -k ./demo_app/05_cicd/k8s
-  deploy_to_gke:
+  deploy_to_gcp:
     runs-on: ubuntu-latest
     steps:
     - name: Check out the repo
@@ -57,7 +57,7 @@ jobs:
       with:
         files: ./demo_app/05_cicd/k8s/deployment.yaml
         replacements: '$IMAGE_TAG=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}'
-    - name: Deploy to AWS cluster
+    - name: Deploy to GCP cluster
       uses: ameydev/gke-kubectl-action@master
       env:
         PROJECT_ID: ${{ secrets.PROJECT_ID }}
