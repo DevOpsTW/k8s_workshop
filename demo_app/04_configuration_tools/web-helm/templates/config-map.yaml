@@ -10,3 +10,4 @@ data:
     BLOG_TITLE={{ quote .Values.blog.title }}
     BLOG_BANNER_TITLE={{ quote .Values.blog.banner.title }}
     BLOG_BANNER_SUBTITLE={{ quote .Values.blog.banner.subtitle }}
+    BLOG_BANNER_COLOR={{ quote .Values.blog.banner.color }}

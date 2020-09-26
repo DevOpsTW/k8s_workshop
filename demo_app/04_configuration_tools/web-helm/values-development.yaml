@@ -4,4 +4,5 @@ blog:
   banner: 
     title: "[development] Kubernetes 實戰工作坊"
     subtitle: "[development] 帶你從無到有打造 Kubernetes 的環境"
+    color: "bg-dark"
 

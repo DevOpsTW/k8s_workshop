@@ -4,4 +4,5 @@ blog:
   banner: 
     title: "[Staging] TEST Kubernetes 實戰工作坊"
     subtitle: "[Staging] 帶你從無到有打造 Kubernetes 的 TEST 環境"
+    color: "bg-dark"
 
