@@ -18,9 +18,37 @@ jobs:
         repository: ${{ secrets.DOCKER_REPOSITORY }}
         path: demo_app/05_cicd
         tags: ${{ github.sha }}, latest
-  deploy_to_production:
+  # deploy_to_aws:
+  #   runs-on: ubuntu-latest
+  #   name: Deploy to k8s cluster in AWS
+  #   steps:
+  #   - name: Check out the repo
+  #     uses: actions/checkout@v2
+  #   - name: Replace image tag in deployment
+  #     uses: datamonsters/replace-action@v2
+  #     with:
+  #       files: ./demo_app/05_cicd/k8s/deployment.yaml
+  #       replacements: '$IMAGE_TAG=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}'
+  #   - name: Configure AWS credentials
+  #     uses: aws-actions/configure-aws-credentials@v1
+  #     with:
+  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       aws-region: us-west-2
+  #   - name: Deploy to AWS cluster
+  #     uses: kodermax/kubectl-aws-eks@master
+  #     env:
+  #       KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+  #     with:
+  #       args: apply -k ./demo_app/05_cicd/k8s
+  #   - name: Get K8s cluster info
+  #     uses: kodermax/kubectl-aws-eks@master
+  #     env:
+  #       KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+  #     with:
+  #       args: get -k ./demo_app/05_cicd/k8s
+  deploy_to_gke:
     runs-on: ubuntu-latest
-    name: Deploy to k8s cluster
     steps:
     - name: Check out the repo
       uses: actions/checkout@v2
@@ -29,21 +57,21 @@ jobs:
       with:
         files: ./demo_app/05_cicd/k8s/deployment.yaml
         replacements: '$IMAGE_TAG=${{ secrets.DOCKER_REPOSITORY }}:${{ github.sha }}'
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2
-    - name: deploy to cluster
-      uses: kodermax/kubectl-aws-eks@master
+    - name: Deploy to AWS cluster
+      uses: ameydev/gke-kubectl-action@master
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        PROJECT_ID: ${{ secrets.PROJECT_ID }}
+        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
+        ZONE_NAME: ${{ secrets.ZONE_NAME }}
       with:
         args: apply -k ./demo_app/05_cicd/k8s
-    - name: Get cluster info
-      uses: kodermax/kubectl-aws-eks@master
+    - name: Get K8s cluster info
+      uses: ameydev/gke-kubectl-action@master
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        PROJECT_ID: ${{ secrets.PROJECT_ID }}
+        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
+        ZONE_NAME: ${{ secrets.ZONE_NAME }}
       with:
         args: get -k ./demo_app/05_cicd/k8s
